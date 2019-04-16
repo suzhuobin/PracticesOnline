@@ -5,39 +5,30 @@
     android:layout_height="match_parent"
     tools:context=".activities.activities.SplashActivity">
 
-    <FrameLayout
-        android:id="@+id/fragment_splash_container"
+    <FrameLayout android:id="@+id/fragment_splash_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/splash1">
-
-    </FrameLayout>
-
+        android:layout_height="match_parent"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/circleRadius">
-
-        <TextView
-            android:id="@+id/activity_splash_tv_copy_right"
+        android:padding="16dp">
+        <TextView android:id="@+id/activity_splash_tv_copy_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="by.lzzy.hzq"
+            android:text="by lzzy.gxy"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/circleRadius" />
-
-        <TextView
-            android:id="@+id/activity_splash_tv_count_down"
+            android:textSize="11dp"/>
+        <TextView android:id="@+id/activity_splash_tv_count_down"
             android:layout_width="@dimen/circleRadius"
             android:layout_height="@dimen/circleRadius"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_circle"
+            android:background="@drawable/tv_circle_style"
             android:gravity="center"
-            android:hint="9秒"
-            android:textSize="@dimen/circleRadius" />
-
+            android:textSize="15sp"
+            tools:text="5秒"/>
     </RelativeLayout>
+
 </FrameLayout>

@@ -1,21 +1,18 @@
 package net.lzzy.practicesonline.activities.activities;
 
-import android.annotation.SuppressLint;
-
 import androidx.fragment.app.Fragment;
 
 import net.lzzy.practicesonline.R;
 import net.lzzy.practicesonline.activities.fragments.PracticesFragment;
 
 /**
- * @author lzzy_gxy
- * @date 2019/4/16
+ * @author lzzy_gxy on 2019/4/16.
  * Description:
  */
 public class PracticesActivity extends BaseActivity {
     @Override
     protected int getLayoutRes() {
-        return R.layout.activity_practices;
+        return R.layout.acivity_practices;
     }
 
     @Override
