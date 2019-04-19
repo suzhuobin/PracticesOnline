@@ -17,32 +17,34 @@ import net.lzzy.practicesonline.activities.activities.SplashActivity;
  * Description:
  */
 public class ViewUtils {
-    public static void gotoSetting(Context context){
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_setting,null);
-        Pair<String,String> url = AppUtils.loadServerSetting(context);
+    public static void gotoSetting(Context context) {
+        View view = LayoutInflater.from(context).inflate
+                (R.layout.dialog_setting, null);
+        Pair<String, String> url = AppUtils.loadServerSetting(context);
         EditText edtIP = view.findViewById(R.id.dialog_setting_edt_ip);
         edtIP.setText(url.first);
         EditText edtPort = view.findViewById(R.id.dialog_setting_edt_port);
         edtPort.setText(url.second);
         new AlertDialog.Builder(context)
                 .setView(view)
-                .setNegativeButton("取消",(dialog, which) -> gotoMain(context))
-                .setPositiveButton("保存",(dialog, which) -> {
+                .setNegativeButton("取消", (dialog, which) -> gotoMain(context))
+                .setPositiveButton("保存", (dialog, which) -> {
                     String ip = edtIP.getText().toString();
                     String port = edtPort.getText().toString();
-                    if(TextUtils.isEmpty(ip) || TextUtils.isEmpty(port)){
-                        Toast.makeText(context, "信息不完整", Toast.LENGTH_SHORT).show();
+                    if (TextUtils.isEmpty(ip) || TextUtils.isEmpty(port)) {
+                        Toast.makeText(context, "信息不完整",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    AppUtils.saveServerSetting(ip,port,context);
+                    AppUtils.saveServerSetting(ip, port, context);
                     gotoMain(context);
                 })
                 .show();
     }
 
-    private static void gotoMain(Context context){
-        if (context instanceof SplashActivity){
-            ((SplashActivity)context).gotoMain();
+    private static void gotoMain(Context context) {
+        if (context instanceof SplashActivity) {
+            ((SplashActivity) context).gotoMain();
         }
     }
 }

@@ -9,7 +9,6 @@ import net.lzzy.practicesonline.R;
 public class PracticesFragment extends BaseFragment{
     @Override
     protected void populate() {
-
     }
 
     @Override
@@ -19,6 +18,5 @@ public class PracticesFragment extends BaseFragment{
 
     @Override
     public void search(String kw) {
-
     }
 }

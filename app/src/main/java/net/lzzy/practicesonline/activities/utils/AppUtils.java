@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- *
  * @author lzzy_gxy
  * @date 2019/3/11
  * Description:
@@ -42,10 +41,9 @@ public class AppUtils extends Application {
     }
 
 
-
-    public static void exit(){
-        for (Activity activity:activities){
-            if(activity != null){
+    public static void exit() {
+        for (Activity activity : activities) {
+            if (activity != null) {
                 activity.finish();
             }
         }
@@ -54,22 +52,22 @@ public class AppUtils extends Application {
 
     // region 1.activity相关
 
-    public static Context getContext(){
+    public static Context getContext() {
         return wContext.get();
     }
 
-    public static void addActivity(Activity activity){
+    public static void addActivity(Activity activity) {
         activities.add(activity);
     }
 
-    public static void removeActivity(Activity activity){
+    public static void removeActivity(Activity activity) {
         activities.remove(activity);
     }
 
-    public static Activity getRunningActivity(){
-        for (Activity activity:activities){
+    public static Activity getRunningActivity() {
+        for (Activity activity : activities) {
             String name = activity.getLocalClassName();
-            if (AppUtils.runningActivity.equals(name)){
+            if (AppUtils.runningActivity.equals(name)) {
                 return activity;
             }
         }
@@ -80,30 +78,34 @@ public class AppUtils extends Application {
         AppUtils.runningActivity = runningActivity;
     }
 
-    public static void setStopped(String stoppedActivity){
-        if(stoppedActivity.equals(AppUtils.runningActivity)){
-            AppUtils.runningActivity = "" ;
+    public static void setStopped(String stoppedActivity) {
+        if (stoppedActivity.equals(AppUtils.runningActivity)) {
+            AppUtils.runningActivity = "";
         }
     }
     //endregion
     // region 2.创建线程执行
 
     private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
-    private static final int CORE_POOL_SIZE = Math.max(2,Math.min(CPU_COUNT - 1, 4));
+    private static final int CORE_POOL_SIZE =
+            Math.max(2, Math.min(CPU_COUNT - 1, 4));
     private static final int MAX_POOL_SIZE = CPU_COUNT * 2 + 1;
     private static final int KEEP_ALIVE_SECONDS = 30;
     private static final ThreadFactory THREAD_FACTORY = new ThreadFactory() {
         private final AtomicInteger count = new AtomicInteger(1);
+
         @Override
         public Thread newThread(Runnable r) {
-            return new Thread(r,"thread #"+count.getAndIncrement());
+            return new Thread(r, "thread #" + count.getAndIncrement());
         }
     };
-    private static final BlockingQueue<Runnable> POOL_QUEUE = new LinkedBlockingQueue<>(128);
+    private static final BlockingQueue<Runnable> POOL_QUEUE =
+            new LinkedBlockingQueue<>(128);
 
-    public static ThreadPoolExecutor getExecutor(){
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE,
-                KEEP_ALIVE_SECONDS, TimeUnit.SECONDS, POOL_QUEUE, THREAD_FACTORY);
+    public static ThreadPoolExecutor getExecutor() {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor
+                (CORE_POOL_SIZE, MAX_POOL_SIZE,
+                        KEEP_ALIVE_SECONDS, TimeUnit.SECONDS, POOL_QUEUE, THREAD_FACTORY);
         executor.allowCoreThreadTimeOut(true);
         return executor;
     }
@@ -111,33 +113,35 @@ public class AppUtils extends Application {
     // endregion
     // region  3.server相关
 
-    public static void tryConnectServer (String address) throws IOException {
+    public static void tryConnectServer(String address) throws IOException {
         URL url = new URL(address);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(5000);
         connection.getContent();
     }
 
-    public static void saveServerSetting(String ip, String port, Context context){
-        SharedPreferences spSetting = context.getSharedPreferences(SP_SETTING, MODE_PRIVATE);
+    public static void saveServerSetting(String ip, String port, Context context) {
+        SharedPreferences spSetting = context.getSharedPreferences
+                (SP_SETTING, MODE_PRIVATE);
         spSetting.edit()
                 .putString(URL_IP, ip)
                 .putString(URL_PORT, port)
                 .apply();
     }
 
-    public static Pair<String, String> loadServerSetting(Context context){
-        SharedPreferences spSetting = context.getSharedPreferences(SP_SETTING, MODE_PRIVATE);
-        String ip = spSetting.getString(URL_IP,"10.88.91.102");
+    public static Pair<String, String> loadServerSetting(Context context) {
+        SharedPreferences spSetting = context.getSharedPreferences
+                (SP_SETTING, MODE_PRIVATE);
+        String ip = spSetting.getString(URL_IP, "10.88.91.102");
         String port = spSetting.getString(URL_PORT, "8888");
-        return new Pair<>(ip,port);
+        return new Pair<>(ip, port);
     }
     // endregion
 
-    public static boolean isNetworkAvailable(){
+    public static boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = manager !=null ? manager.getActiveNetworkInfo() : null;
+        NetworkInfo info = manager != null ? manager.getActiveNetworkInfo() : null;
         return info != null && info.isConnected();
     }
 }
