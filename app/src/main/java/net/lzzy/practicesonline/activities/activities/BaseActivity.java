@@ -1,6 +1,7 @@
 package net.lzzy.practicesonline.activities.activities;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,24 +10,66 @@ import androidx.fragment.app.FragmentManager;
 
 import net.lzzy.practicesonline.activities.utils.AppUtils;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 /**
- * @author lzzy_gxy on 2019/4/11.
+ * Created by lzzy_gxy on 2019/4/11.
  * Description:
  */
 public abstract class BaseActivity extends AppCompatActivity {
+
+    private Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(getLayoutRes());
         AppUtils.addActivity(this);
-        FragmentManager manager = getSupportFragmentManager();
-        Fragment fragment = manager.findFragmentById(getContainerId());
-        if (fragment == null) {
-            fragment = createFragment();
+        FragmentManager manager=getSupportFragmentManager();
+        fragment = manager.findFragmentById(getContainerId());
+        if (fragment ==null){
+            fragment =createFragment();
             manager.beginTransaction().add(getContainerId(), fragment).commit();
         }
+
     }
+    protected Fragment getFragment(){
+        return fragment;
+    }
+    /**
+     * 获取视图组件
+     * @return
+     */
+    protected abstract int getLayoutRes();
+
+    /**
+     *获取容器id
+     * @return
+     */
+    protected   abstract int getContainerId();
+    /**
+     * 生成托管的fragment对象
+     * @return
+     */
+    protected abstract Fragment createFragment();
 
     @Override
     protected void onDestroy() {
@@ -47,21 +90,123 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Activity的布局文件id
-     *
-     * @return 布局资源猫id
+     * Created by lzzy_gxy on 2019/4/19.
+     * Description:
      */
-    protected abstract int getLayoutRes();
+    public static class ApiService {
+        private static final OkHttpClient CLIENT=new OkHttpClient();
+        public static String get(String address) throws IOException {
+            URL url=new URL(address);
+            HttpURLConnection conn= (HttpURLConnection) url.openConnection();
+            try {
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(6*1000);
+                conn.setReadTimeout(6*1000);
+                BufferedReader reader=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder builder=new StringBuilder();
+                String line;
+                while ((line=reader.readLine())!=null){
+                    builder.append(line).append("\n");
+                }
+                reader.close();
+                return builder.toString();
+            }finally {
+                conn.disconnect();
+            }
+            //todo:1.HttpURLConnection get
+        }
 
-    /**
-     *
-     */
-    protected abstract int getContainerId();
+        public static void post(String address, JSONObject json) throws IOException {
+            URL url=new URL(address);
+            HttpURLConnection conn= (HttpURLConnection) url.openConnection();
 
-    /**
-     * 生成托管的Fragment对象
-     *
-     * @return fragment
-     */
-    protected abstract Fragment createFragment();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setChunkedStreamingMode(0);
+                conn.setRequestProperty("Content-Type","application/json");
+                byte[] data=json.toString().getBytes(StandardCharsets.UTF_8);
+                conn.setRequestProperty("Content-Length", String.valueOf(data.length));
+                conn.setUseCaches(false);
+                try (OutputStream stream=conn.getOutputStream()){
+                    //写入数据
+                    stream.write(data);
+                    stream.flush();
+                }finally {
+                conn.disconnect();
+            }
+            //todo:2.HttpURLConnection post
+        }
+
+        public static String okGet(String address) throws IOException {
+            Request request= new Request.Builder().url(address).build();
+            try(Response response=CLIENT.newCall(request).execute()) {
+                if (response.isSuccessful()){
+                    return response.body().string();
+                }else {
+                    throw new IOException("错误码"+response.code());
+                }
+
+
+            }
+        }
+        public static String okGet(String address, String args, HashMap<String,Object> headers)throws IOException{
+            if (!TextUtils.isEmpty(args)){
+                address=address.concat("?").concat(args);
+            }
+            Request.Builder builder=new Request.Builder().url(address);
+            if (headers!=null&&headers.size()>0){
+                for (Object o:headers.entrySet()){
+                    Map.Entry entry= (Map.Entry) o;
+                    String key=entry.getKey().toString();
+                    Object val=entry.getValue();
+                    if (val instanceof String){
+                        builder=builder.header(key,val.toString());
+                    }else if(val instanceof List){
+                        for (String v: ApiService.<List<String>>cast(val)){
+                            builder=builder.header(key,v);
+                        }
+
+                    }
+                }
+            }
+            Request request=builder.build();
+            try(Response response=CLIENT.newCall(request).execute()) {
+                if (response.isSuccessful()){
+                    return response.body().string();
+                }else {
+                    throw new IOException("错误码:"+response.code());
+                }
+            }
+        }
+        @SuppressWarnings("unchecked")
+        private static <T> T cast(Object obj){
+            return (T) obj;
+        }
+
+
+        public static int okPost(String address,JSONObject json) throws IOException {
+            RequestBody body=RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                    json.toString());
+            Request request=new Request.Builder()
+                    .url(address)
+                    .post(body)
+                    .build();
+            try(Response response=CLIENT.newCall(request).execute()) {
+                return response.code();
+            }
+        }
+
+
+        public  String okRequest(String address,JSONObject json) throws IOException {
+            RequestBody body=RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                    json.toString());
+            Request request=new Request.Builder()
+                    .url(address)
+                    .post(body)
+                    .build();
+            try(Response response=CLIENT.newCall(request).execute()) {
+                return response.body().string();
+            }
+        }
+    }
 }

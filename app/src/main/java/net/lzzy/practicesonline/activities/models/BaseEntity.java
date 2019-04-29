@@ -5,6 +5,7 @@ import net.lzzy.sqllib.AsPrimaryKey;
 import java.util.UUID;
 
 /**
+ *
  * @author lzzy_gxy
  * @date 2019/3/11
  * Description:
@@ -12,8 +13,7 @@ import java.util.UUID;
 public class BaseEntity {
     @AsPrimaryKey
     UUID id;
-
-    BaseEntity() {
+    BaseEntity(){
         id = UUID.randomUUID();
     }
 
