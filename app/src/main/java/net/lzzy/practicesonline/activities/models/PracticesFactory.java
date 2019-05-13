@@ -86,7 +86,7 @@ public class PracticesFactory {
         }
     }
 /**保存题目*/
-    public void saveQuestions(List<Question> questions, UUID practiceId){
+    public void saveQuestions(List<Question> questions,UUID practiceId){
         for (Question q:questions){
             QuestionFactory.getInstance().insert(q);
         }

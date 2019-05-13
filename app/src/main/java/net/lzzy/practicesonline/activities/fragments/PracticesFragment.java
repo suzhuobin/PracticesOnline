@@ -70,7 +70,7 @@ public class PracticesFragment extends BaseFragment {
      * 自定义线程 返回数据的方法
      *
      */
-    private static class DownloadHandler extends AbstractStaticHandler<PracticesFragment>{
+    private static class DownloadHandler extends AbstractStaticHandler<PracticesFragment> {
 
         DownloadHandler(PracticesFragment context) {
             super(context);
@@ -386,7 +386,7 @@ public class PracticesFragment extends BaseFragment {
         ViewUtils.showProgress(getContext(),"开始下载题目...");
         executor.execute(()->{
             try {
-                String json= QuestionService.getQuestionsOfPracticeFromServer(apiId);
+                String json=QuestionService.getQuestionsOfPracticeFromServer(apiId);
                 Message msg=handler.obtainMessage(WHAT_QUESTION_DONE,json);
                 msg.arg1=apiId;
                 handler.sendMessage(msg);

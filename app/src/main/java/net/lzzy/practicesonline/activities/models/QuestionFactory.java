@@ -25,8 +25,8 @@ public class QuestionFactory {
     }
 
     private QuestionFactory() {
-        repository=new SqlRepository<>(AppUtils.getContext(), Question.class,DbConstants.packager);
-        optionRepository=new SqlRepository<>(AppUtils.getContext(), Option.class,DbConstants.packager);
+        repository=new SqlRepository<>(AppUtils.getContext(), Question.class, DbConstants.packager);
+        optionRepository=new SqlRepository<>(AppUtils.getContext(), Option.class, DbConstants.packager);
     }
 
     public List<Question> getByPractices(String practiceId){

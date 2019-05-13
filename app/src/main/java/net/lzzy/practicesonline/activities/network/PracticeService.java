@@ -1,8 +1,8 @@
 package net.lzzy.practicesonline.activities.network;
 
-import net.lzzy.practicesonline.activities.activities.BaseActivity;
 import net.lzzy.practicesonline.activities.constants.ApiConstants;
 import net.lzzy.practicesonline.activities.models.Practice;
+import net.lzzy.practicesonline.activities.models.view.PracticeReult;
 import net.lzzy.sqllib.JsonConverter;
 
 import org.json.JSONException;
@@ -16,11 +16,15 @@ import java.util.List;
  */
 public class PracticeService {
     public static String getPracticesFromServer() throws IOException {
-        return BaseActivity.ApiService.okGet(ApiConstants.URL_PRACTICES);
+        return ApiService.okGet(ApiConstants.URL_PRACTICES);
     }
 
     public static List<Practice> getPractices(String json) throws IllegalAccessException, JSONException, InstantiationException {
         JsonConverter<Practice> converter=new JsonConverter<>(Practice.class);
         return converter.getArray(json);
+    }
+
+    public static int postResult(PracticeReult reult) throws IOException, JSONException {
+        return ApiService.okPost(ApiConstants.URL_RESULT,reult.toJson());
     }
 }

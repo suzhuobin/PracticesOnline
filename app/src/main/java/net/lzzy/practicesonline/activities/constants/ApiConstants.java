@@ -8,7 +8,7 @@ import net.lzzy.practicesonline.activities.utils.AppUtils;
  */
 public class ApiConstants {
     private static final String IP= AppUtils.loadServerSetting(AppUtils.getContext()).first;
-    private static String PORT=AppUtils.loadServerSetting(AppUtils.getContext()).second;
+    private static String PORT= AppUtils.loadServerSetting(AppUtils.getContext()).second;
     private static final String PROTOCOL="http://";
 /**
  * API地址
@@ -29,6 +29,10 @@ public class ApiConstants {
     public static final String JSON_PRACTICE_API_OUTLINES="OutLines";
     public static final String JSON_PRACTICE_API_QUESTION_COUNT="QuestionCount";
 
+    /**提交结果*/
+    private static final String ACTION_RESULT = "/api/result/PracticeResult";
+    public static final String URL_RESULT = URL_API.concat(ACTION_RESULT);
+
     /**Question的json标签*/
     public static final String JSON_QUESTION_ANALYSIS="Analysis";
     public static final String JSON_QUESTION_CONTENT="Content";
@@ -41,4 +45,15 @@ public class ApiConstants {
     public static final String JSON_OPTION_LABEL="Label";
     public static final String JSON_OPTION_API_ID="Id";
     public static final String JSON_ANSWERS_OPTION_ID="OptionId";
+
+    /**post的标签*/
+    public static final String JSON_RESULT_API_ID="PracticeID";
+    public static final String JSON_RESULT_SCORE_RATIO="ScroreRatio";
+    public static final String JSON_RESULT_WRONG_IDS="WrongQuestionIds";
+    public static final String JSON_RESULT_PERSON_INFO="PhoneNo";
+
+
+
+
+
 }

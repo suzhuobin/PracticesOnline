@@ -59,7 +59,7 @@ public class PracticesActivity extends BaseActivity implements PracticesFragment
         //读取本地数据库数据
         int localCount = PracticesFactory.getInstance().get().size();
         //启动后台服务
-        Intent intent=new Intent(this,DetectWebService.class);
+        Intent intent=new Intent(this, DetectWebService.class);
         intent.putExtra(EXTRA_LOCAL_COUNT,localCount);
         bindService(intent,connection,BIND_AUTO_CREATE);
         //endregion
@@ -126,7 +126,7 @@ public class PracticesActivity extends BaseActivity implements PracticesFragment
 
     @Override
     public void OnPractice(String practiceId,int apiId) {
-        Intent intent=new Intent(PracticesActivity.this, QuestionActivity.class);
+        Intent intent=new Intent(PracticesActivity.this,QuestionActivity.class);
         intent.putExtra(EXTRA_PRACTICE_ID,practiceId);
         intent.putExtra(EXTRA_API_ID,apiId);
         startActivity(intent);

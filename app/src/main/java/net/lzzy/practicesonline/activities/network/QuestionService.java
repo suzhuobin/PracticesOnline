@@ -1,6 +1,5 @@
 package net.lzzy.practicesonline.activities.network;
 
-import net.lzzy.practicesonline.activities.activities.BaseActivity;
 import net.lzzy.practicesonline.activities.constants.ApiConstants;
 import net.lzzy.practicesonline.activities.models.Option;
 import net.lzzy.practicesonline.activities.models.Question;
@@ -23,7 +22,7 @@ import java.util.UUID;
 public class QuestionService {
     public static String getQuestionsOfPracticeFromServer(int apiId) throws IOException {
         String address= ApiConstants.URL_QUESTIONS+apiId;
-        return BaseActivity.ApiService.okGet(address);
+        return ApiService.okGet(address);
     }
 
     public static List<Question> getQuestions(String json, UUID practiceId) throws IllegalAccessException, JSONException, InstantiationException {
@@ -35,7 +34,7 @@ public class QuestionService {
         return questions;
     }
 
-    public static List<Option> getOptionsFromJson(String jsonOptions,String jsonAnswers)throws IllegalAccessException, JSONException, InstantiationException{
+    public static List<Option> getOptionsFromJson(String jsonOptions, String jsonAnswers)throws IllegalAccessException, JSONException, InstantiationException{
         JsonConverter<Option> converter=new JsonConverter<>(Option.class);
         List<Option> options=converter.getArray(jsonOptions);
         List<Integer> answerIds=new ArrayList<>();
