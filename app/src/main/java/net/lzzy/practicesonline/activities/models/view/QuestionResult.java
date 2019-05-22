@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import java.util.UUID;
 
 /**
- *
  * @author lzzy_gxy
  * @date 2019/5/8
  * Description:
@@ -16,7 +15,8 @@ public class QuestionResult implements Parcelable {
     private boolean isRight;
     private WrongType type;
 
-    public QuestionResult(){}
+    public QuestionResult() {
+    }
 
     protected QuestionResult(Parcel in) {
         isRight = in.readByte() != 0;

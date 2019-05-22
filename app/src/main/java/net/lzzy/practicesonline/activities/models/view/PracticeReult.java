@@ -9,20 +9,23 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 /**
- * Created by lzzy_gxy on 2019/5/8.
+ * @author lzzy_gxy
+ * @date 2019/5/8
  * Description:
  */
 public class PracticeReult {
-    /**结果*/
+    /**
+     * 结果
+     */
     private List<QuestionResult> results;
     private int id;
     private String info;
-    private static final String SPLITTER=",";
+    private static final String SPLITTER = ",";
 
-    public PracticeReult(List<QuestionResult> results,int apiId,String info){
-        this.id=apiId;
-        this.info=info;
-        this.results=results;
+    public PracticeReult(List<QuestionResult> results, int apiId, String info) {
+        this.id = apiId;
+        this.info = info;
+        this.results = results;
     }
 
     public List<QuestionResult> getResults() {
@@ -49,42 +52,42 @@ public class PracticeReult {
         this.info = info;
     }
 
-    private double getRatio(){
+    private double getRatio() {
         //正确的题目数量
-        int number=0;
-       for (QuestionResult result:results){
-            if (result.isRight()){
+        int number = 0;
+        for (QuestionResult result : results) {
+            if (result.isRight()) {
                 number++;
             }
-       }
-       //总分
-       return number*1.0/results.size();
+        }
+        //总分
+        return number * 1.0 / results.size();
     }
 
-    private  String getWrongOrders(){
+    private String getWrongOrders() {
         //错误题目序号
-        int i=0;
-        String ids="";
-           for (QuestionResult result:results){
-               i++;
-               if (!result.isRight()){
-                   ids=ids.concat(i+SPLITTER);
-               }
-           }
-           if (ids.endsWith(SPLITTER)){
-               ids=ids.substring(0,ids.length()-1);
-           }
+        int i = 0;
+        String ids = "";
+        for (QuestionResult result : results) {
+            i++;
+            if (!result.isRight()) {
+                ids = ids.concat(i + SPLITTER);
+            }
+        }
+        if (ids.endsWith(SPLITTER)) {
+            ids = ids.substring(0, ids.length() - 1);
+        }
         return ids;
     }
 
-    public JSONObject toJson()throws JSONException {
-        JSONObject json=new JSONObject();
+    public JSONObject toJson() throws JSONException {
+        JSONObject json = new JSONObject();
         //调用put方法
-       json.put(ApiConstants.JSON_RESULT_API_ID, id);
-       json.put(ApiConstants.JSON_RESULT_PERSON_INFO, info);
-       json.put(ApiConstants.JSON_RESULT_SCORE_RATIO,
-               new DecimalFormat("#.00").format(getRatio()));
-       json.put(ApiConstants.JSON_RESULT_WRONG_IDS,getWrongOrders());
+        json.put(ApiConstants.JSON_RESULT_API_ID, id);
+        json.put(ApiConstants.JSON_RESULT_PERSON_INFO, info);
+        json.put(ApiConstants.JSON_RESULT_SCORE_RATIO,
+                new DecimalFormat("#.00").format(getRatio()));
+        json.put(ApiConstants.JSON_RESULT_WRONG_IDS, getWrongOrders());
         return json;
 
     }

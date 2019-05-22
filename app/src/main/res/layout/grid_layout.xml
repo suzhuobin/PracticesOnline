@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/grid_layout_tv"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="@dimen/fifteenDp"
+        android:layout_marginTop="@dimen/fifteenDp"
+        android:background="@drawable/grid_green"
+        android:gravity="center"
+        android:textSize="@dimen/thirtySp"
+        tools:text="1" />
+
+</LinearLayout>

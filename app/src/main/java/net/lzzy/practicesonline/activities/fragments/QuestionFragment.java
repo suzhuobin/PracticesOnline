@@ -30,9 +30,9 @@ import java.util.List;
  * Description:
  */
 public class QuestionFragment extends BaseFragment {
-    public static final String ARGS_QUESTION_ID = "argsQuestionId";
-    public static final String ARGS_POS = "argsPos";
-    public static final String ARGS_ISCOMMITTED = "argsIscommitted";
+    private static final String ARGS_QUESTION_ID = "argsQuestionId";
+    private static final String ARGS_POS = "argsPos";
+    private static final String ARGS_ISCOMMITTED = "argsIscommitted";
     private Question question;
     private int pos;
     private boolean iscommitted;

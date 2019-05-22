@@ -15,14 +15,13 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *
  * @author lzzy_gxy
  * @date 2019/4/16
  * Description:
  */
 public class Question extends BaseEntity implements Sqlitable, Jsonable {
     @Ignored
-    public static final String COL_PRACTICE_ID="practiceId";
+    public static final String COL_PRACTICE_ID = "practiceId";
     private String content;
     @Ignored
     private QuestionType type;
@@ -32,8 +31,8 @@ public class Question extends BaseEntity implements Sqlitable, Jsonable {
     @Ignored
     private List<Option> options;
 
-    public Question(){
-        options= new ArrayList<>();
+    public Question() {
+        options = new ArrayList<>();
     }
 
     public String getContent() {
@@ -54,7 +53,7 @@ public class Question extends BaseEntity implements Sqlitable, Jsonable {
 
     public void setDbType(int dbType) {
         this.dbType = dbType;
-        type=QuestionType.getInstance(dbType);
+        type = QuestionType.getInstance(dbType);
     }
 
     public String getAnalysis() {
@@ -94,18 +93,18 @@ public class Question extends BaseEntity implements Sqlitable, Jsonable {
 
     @Override
     public void fromJson(JSONObject json) throws JSONException {
-        analysis=json.getString(ApiConstants.JSON_QUESTION_ANALYSIS);
-        content=json.getString(ApiConstants.JSON_QUESTION_CONTENT);
+        analysis = json.getString(ApiConstants.JSON_QUESTION_ANALYSIS);
+        content = json.getString(ApiConstants.JSON_QUESTION_CONTENT);
         setDbType(json.getInt(ApiConstants.JSON_QUESTION_TYPE));
-        String strOption= json.getString(ApiConstants.JSON_QUESTION_OPTIONS);
-        String strAnswers=json.getString(ApiConstants.JSON_QUESTION_ANSWER);
+        String strOption = json.getString(ApiConstants.JSON_QUESTION_OPTIONS);
+        String strAnswers = json.getString(ApiConstants.JSON_QUESTION_ANSWER);
         try {
-            List<Option> options= QuestionService.getOptionsFromJson(strOption,strAnswers);
-            for (Option option:options){
+            List<Option> options = QuestionService.getOptionsFromJson(strOption, strAnswers);
+            for (Option option : options) {
                 option.setQuestionId(id);
             }
             setOptions(options);
-        }catch (IllegalAccessException|InstantiationException e){
+        } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
     }

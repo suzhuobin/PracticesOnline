@@ -10,12 +10,14 @@ import androidx.fragment.app.FragmentManager;
 import net.lzzy.practicesonline.activities.utils.AppUtils;
 
 /**
- * Created by lzzy_gxy on 2019/4/11.
+ * @author lzzy_gxy
+ * @date 2019/4/11
  * Description:
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
     private Fragment fragment;
+    private FragmentManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,30 +25,39 @@ public abstract class BaseActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(getLayoutRes());
         AppUtils.addActivity(this);
-        FragmentManager manager=getSupportFragmentManager();
+        manager = getSupportFragmentManager();
         fragment = manager.findFragmentById(getContainerId());
-        if (fragment ==null){
-            fragment =createFragment();
+        if (fragment == null) {
+            fragment = createFragment();
             manager.beginTransaction().add(getContainerId(), fragment).commit();
         }
-
     }
-    protected Fragment getFragment(){
+
+    protected Fragment getFragment() {
         return fragment;
     }
+
+    protected FragmentManager getManager() {
+        return manager;
+    }
+
     /**
      * 获取视图组件
+     *
      * @return
      */
     protected abstract int getLayoutRes();
 
     /**
-     *获取容器id
+     * 获取容器id
+     *
      * @return
      */
-    protected   abstract int getContainerId();
+    protected abstract int getContainerId();
+
     /**
      * 生成托管的fragment对象
+     *
      * @return
      */
     protected abstract Fragment createFragment();
@@ -68,5 +79,4 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onStop();
         AppUtils.setStopped(getLocalClassName());
     }
-
 }

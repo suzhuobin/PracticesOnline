@@ -11,16 +11,17 @@ import org.json.JSONObject;
 import java.util.Date;
 
 /**
- * Created by lzzy_gxy on 2019/4/16.
+ * @author lzzy_gxy
+ * @date 2019/4/16
  * Description:
  */
 public class Practice extends BaseEntity implements Sqlitable, Jsonable {
     @Ignored
-    static final String COL_NAME="name";
+    static final String COL_NAME = "name";
     @Ignored
-    static final String COL_OUTLINES="outlines";
+    static final String COL_OUTLINES = "outlines";
     @Ignored
-    public static final String COL_API_ID="apiId";
+    public static final String COL_API_ID = "apiId";
 
     private String name;
     private int questionCount;
@@ -90,10 +91,10 @@ public class Practice extends BaseEntity implements Sqlitable, Jsonable {
 
     @Override
     public void fromJson(JSONObject json) throws JSONException {
-        apiId=json.getInt(ApiConstants.JSON_PRACTICE_API_ID);
-        name=json.getString(ApiConstants.JSON_PRACTICE_API_NAME);
-        outlines=json.getString(ApiConstants.JSON_PRACTICE_API_OUTLINES);
-        questionCount=json.getInt(ApiConstants.JSON_PRACTICE_API_QUESTION_COUNT);
-        downloadDate=new Date();
+        apiId = json.getInt(ApiConstants.JSON_PRACTICE_API_ID);
+        name = json.getString(ApiConstants.JSON_PRACTICE_API_NAME);
+        outlines = json.getString(ApiConstants.JSON_PRACTICE_API_OUTLINES);
+        questionCount = json.getInt(ApiConstants.JSON_PRACTICE_API_QUESTION_COUNT);
+        downloadDate = new Date();
     }
 }

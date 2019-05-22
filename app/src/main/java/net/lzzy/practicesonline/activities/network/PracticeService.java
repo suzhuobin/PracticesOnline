@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by lzzy_gxy on 2019/4/22.
+ * @author lzzy_gxy
+ * @date 2019/4/22
  * Description:
  */
 public class PracticeService {
@@ -20,11 +21,11 @@ public class PracticeService {
     }
 
     public static List<Practice> getPractices(String json) throws IllegalAccessException, JSONException, InstantiationException {
-        JsonConverter<Practice> converter=new JsonConverter<>(Practice.class);
+        JsonConverter<Practice> converter = new JsonConverter<>(Practice.class);
         return converter.getArray(json);
     }
 
     public static int postResult(PracticeReult reult) throws IOException, JSONException {
-        return ApiService.okPost(ApiConstants.URL_RESULT,reult.toJson());
+        return ApiService.okPost(ApiConstants.URL_RESULT, reult.toJson());
     }
 }

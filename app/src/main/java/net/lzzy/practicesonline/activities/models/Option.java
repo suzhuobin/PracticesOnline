@@ -11,12 +11,13 @@ import org.json.JSONObject;
 import java.util.UUID;
 
 /**
- * Created by lzzy_gxy on 2019/4/16.
+ * @author lzzy_gxy
+ * @date 2019/4/16
  * Description:
  */
 public class Option extends BaseEntity implements Sqlitable, Jsonable {
     @Ignored
-    public static final String COL_QUESTION_ID="questionId";
+    public static final String COL_QUESTION_ID = "questionId";
     private String content;
     private String label;
     private UUID questionId;
@@ -75,8 +76,8 @@ public class Option extends BaseEntity implements Sqlitable, Jsonable {
 
     @Override
     public void fromJson(JSONObject json) throws JSONException {
-        content= json.getString(ApiConstants.JSON_OPTION_CONTENT);
-        label=json.getString(ApiConstants.JSON_OPTION_LABEL);
-        apild=json.getInt(ApiConstants.JSON_OPTION_API_ID);
+        content = json.getString(ApiConstants.JSON_OPTION_CONTENT);
+        label = json.getString(ApiConstants.JSON_OPTION_LABEL);
+        apild = json.getInt(ApiConstants.JSON_OPTION_API_ID);
     }
 }

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import net.lzzy.practicesonline.R;
 import net.lzzy.practicesonline.activities.fragments.QuestionFragment;
+import net.lzzy.practicesonline.activities.models.FavoriteFactory;
 import net.lzzy.practicesonline.activities.models.Question;
 import net.lzzy.practicesonline.activities.models.QuestionFactory;
 import net.lzzy.practicesonline.activities.models.UserCookies;
@@ -36,6 +38,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.lzzy.practicesonline.activities.activities.ResultActivity.POSITION;
+import static net.lzzy.practicesonline.activities.activities.ResultActivity.QUESTION;
+import static net.lzzy.practicesonline.activities.activities.ResultActivity.RESULT_CODE;
+import static net.lzzy.practicesonline.activities.activities.ResultActivity.RESULT_CODE_TWO;
+
 /**
  * @author Administrator
  */
@@ -43,6 +50,7 @@ public class QuestionActivity extends AppCompatActivity {
     private static final int WHAT_PRACTICE_DONE = 0;
     private static final int WHAT_EXCEPTION = 1;
     public static final int EXTRA_REQUEST_CODE = 0;
+    public static final int EXTRA_RESULT_CODE = 5;
 
     private String practiceId;
     private int apiId;
@@ -56,8 +64,9 @@ public class QuestionActivity extends AppCompatActivity {
     private LinearLayout container;
     private View[] dost;
     private DownloadHandler handler = new DownloadHandler(this);
-    private static final String EXTRA_PRACTICE_ID = "practiceId";
-    private static final String EXTRA_RESULTS = "results";
+    public static final String EXTRA_PRACTICE_ID = "practiceId";
+    public static final String EXTRA_RESULTS = "results";
+    private FragmentStatePagerAdapter adapter;
 
     /**
      * 自定义线程 返回数据的方法
@@ -131,11 +140,11 @@ public class QuestionActivity extends AppCompatActivity {
      * 查看成绩
      */
     private void redirect() {
-//        List<QuestionResult> results = UserCookies.getInstance().getResultFromCoolies(questions);
-//        Intent intent = new Intent(this, ResultActivity.class);
-//        intent.putExtra(EXTRA_PRACTICE_ID, practiceId);
-//        intent.putParcelableArrayListExtra(EXTRA_RESULTS, (ArrayList<? extends Parcelable>) results);
-//        startActivityForResult(intent, EXTRA_REQUEST_CODE);
+        List<QuestionResult> results = UserCookies.getInstance().getResultFromCoolies(questions);
+        Intent intent = new Intent(this, ResultActivity.class);
+        intent.putExtra(EXTRA_PRACTICE_ID, practiceId);
+        intent.putParcelableArrayListExtra(EXTRA_RESULTS, (ArrayList<? extends Parcelable>) results);
+        startActivityForResult(intent, EXTRA_REQUEST_CODE);
     }
 
     /**
@@ -144,6 +153,36 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EXTRA_REQUEST_CODE && resultCode == RESULT_CODE) {
+            int position = data.getIntExtra(POSITION, -1);
+            pager.setCurrentItem(position);
+        }
+        //查看收藏
+        if (requestCode == EXTRA_REQUEST_CODE && resultCode == RESULT_CODE_TWO) {
+            String result = data.getStringExtra(QUESTION);
+            if (!result.isEmpty()) {
+                List<Question> questionList = new ArrayList<>();
+                FavoriteFactory factory = FavoriteFactory.getInstance();
+                for (Question q : QuestionFactory.getInstance().getByPractices(result)) {
+                    if (factory.isQuestionStarred(q.getId().toString())) {
+                        questionList.add(q);
+                    }
+                }
+                //清空
+                questions.clear();
+                //重新加载
+                questions.addAll(questionList);
+                initDots();
+                adapter.notifyDataSetChanged();
+                if (questions.size() > 0) {
+                    pager.setCurrentItem(0);
+                    refreshDots(0);
+                }
+            }
+
+        }
+
+
     }
 
     String info;
@@ -229,7 +268,9 @@ public class QuestionActivity extends AppCompatActivity {
             tvView.setVisibility(View.GONE);
             tvHint.setVisibility(View.GONE);
         }
-        FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+        adapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+            int count = 0;
+
             @Override
             public Fragment getItem(int position) {
                 Question question = questions.get(position);
@@ -239,6 +280,21 @@ public class QuestionActivity extends AppCompatActivity {
             @Override
             public int getCount() {
                 return questions.size();
+            }
+
+            @Override
+            public void notifyDataSetChanged() {
+                count = getCount();
+                super.notifyDataSetChanged();
+            }
+
+            @Override
+            public int getItemPosition(@NonNull Object object) {
+                if (count > 0) {
+                    count--;
+                    return POSITION_NONE;
+                }
+                return super.getItemPosition(object);
             }
         };
         pager.setAdapter(adapter);
